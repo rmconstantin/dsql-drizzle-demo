@@ -1,0 +1,26 @@
+{
+  "name": "dsql-drizzle-demo",
+  "version": "1.0.0",
+  "description": "Aurora DSQL + Drizzle ORM demo — DSQL-compatible schema, migrations, and CRUD operations",
+  "type": "module",
+  "scripts": {
+    "db:generate": "drizzle-kit generate",
+    "db:lint": "dsql-lint drizzle/*.sql",
+    "db:lint:fix": "dsql-lint --fix drizzle/*.sql",
+    "db:migrate": "tsx src/migrate.ts",
+    "db:seed": "tsx src/seed.ts",
+    "start": "tsx src/index.ts",
+    "demo": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@aws/aurora-dsql-node-postgres-connector": "^0.1.8",
+    "drizzle-orm": "^0.44.0",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.0",
+    "drizzle-kit": "^0.31.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
