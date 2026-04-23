@@ -8,7 +8,7 @@ A minimal demo showing how to use [Drizzle ORM](https://orm.drizzle.team/) with 
 - **DSQL-compatible schema** design with Drizzle (UUIDs, no FKs, TEXT for JSON)
 - **Migration linting** with [`dsql-lint`](https://github.com/awslabs/aurora-dsql-tools/tree/main/dsql-lint) to catch incompatible SQL
 - **CRUD operations** using Drizzle's type-safe query builder
-- **Application-layer referential integrity** (DSQL doesn't support foreign keys)
+- **Application-layer referential integrity** (DSQL doesn't enforce Foreign Keys constraints)
 
 ## Prerequisites
 
@@ -61,6 +61,8 @@ npm run demo
 
 ## DSQL Compatibility Notes
 
+> **Disclaimer:** The compatibility information below reflects Aurora DSQL behavior as of April 23, 2026. Check the [official documentation](https://docs.aws.amazon.com/aurora-dsql/latest/userguide/working-with-postgresql-compatibility.html) for the latest supported features.
+
 Drizzle works with DSQL via its `node-postgres` driver. Key things to keep in mind:
 
 | Feature | DSQL Status | Drizzle Workaround |
@@ -69,7 +71,7 @@ Drizzle works with DSQL via its `node-postgres` driver. Key things to keep in mi
 | `.references()` (foreign keys) | ❌ Not supported | Validate in app code before insert |
 | `json()` / `jsonb()` | ❌ Not supported | Use `text()` + `JSON.stringify/parse` |
 | `pgEnum()` | ❌ Not supported | Use `varchar` + CHECK constraint |
-| Index creation | Must be ASYNC | Use `dsql-lint --fix` on generated migrations |
+| Index creation | Must be ASYNC | `dsql-lint --fix` rewrites `CREATE INDEX` → `CREATE INDEX ASYNC` |
 | Transactions | 3,000 rows max | Batch large operations |
 
 ## Migration Workflow
@@ -78,7 +80,7 @@ The recommended workflow for Drizzle + DSQL:
 
 1. Define schema in `src/db/schema.ts` using DSQL-compatible types
 2. `npm run db:generate` — generate SQL migration files
-3. `npm run db:lint:fix` — auto-fix DSQL incompatibilities (e.g., sync indexes → async)
+3. `npm run db:lint:fix` — auto-fix DSQL incompatibilities (e.g., `CREATE INDEX` → `CREATE INDEX ASYNC`)
 4. `npm run db:migrate` — apply to your DSQL cluster
 
 ## Resources
