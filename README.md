@@ -70,7 +70,7 @@ Drizzle works with DSQL via its `node-postgres` driver. Key things to keep in mi
 | `serial()` / `bigserial()` | ❌ Not supported | Use `uuid().defaultRandom()` |
 | `.references()` (foreign keys) | ❌ Not supported | Validate in app code before insert |
 | `json()` | ✅ Supported | Use `json()` directly — no workaround needed |
-| `jsonb()` | ❌ Not supported | Use `json()` instead; `dsql-lint --fix` auto-rewrites `jsonb()` → `json()` |
+| `jsonb()` | ❌ Not supported | Use `json()` instead |
 | `pgEnum()` | ❌ Not supported | Use `varchar` + CHECK constraint |
 | Index creation | Must be ASYNC | `dsql-lint --fix` rewrites `CREATE INDEX` → `CREATE INDEX ASYNC` |
 | Transactions | 3,000 rows max | Batch large operations |
@@ -81,7 +81,7 @@ The recommended workflow for Drizzle + DSQL:
 
 1. Define schema in `src/db/schema.ts` using DSQL-compatible types
 2. `npm run db:generate` — generate SQL migration files
-3. `npm run db:lint:fix` — auto-fix DSQL incompatibilities (e.g., `CREATE INDEX` → `CREATE INDEX ASYNC`, `jsonb` → `json`)
+3. `npm run db:lint:fix` — auto-fix DSQL incompatibilities (e.g., `CREATE INDEX` → `CREATE INDEX ASYNC`)
 4. `npm run db:migrate` — apply to your DSQL cluster
 
 ## Resources
