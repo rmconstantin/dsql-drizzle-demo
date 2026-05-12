@@ -14,21 +14,21 @@ const sampleProducts = [
     category: "electronics",
     price: 12999, // $129.99
     tags: "electronics,peripherals,gaming",
-    metadata: JSON.stringify({ brand: "KeyCo", switches: "Cherry MX Blue" }),
+    metadata: { brand: "KeyCo", switches: "Cherry MX Blue" },
   },
   {
     name: "Ergonomic Mouse",
     category: "electronics",
     price: 7999,
     tags: "electronics,peripherals,ergonomic",
-    metadata: JSON.stringify({ brand: "ErgoTech", dpi: 16000 }),
+    metadata: { brand: "ErgoTech", dpi: 16000 },
   },
   {
     name: "USB-C Hub",
     category: "accessories",
     price: 4999,
     tags: "accessories,usb,hub",
-    metadata: JSON.stringify({ ports: 7, brand: "HubMax" }),
+    metadata: { ports: 7, brand: "HubMax" },
   },
 ];
 

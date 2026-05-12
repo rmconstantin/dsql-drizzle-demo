@@ -5,7 +5,7 @@
  *  1. Connecting to DSQL via the official connector
  *  2. CRUD operations with Drizzle's query builder
  *  3. Application-layer referential integrity (no foreign keys in DSQL)
- *  4. Working with serialized JSON/arrays stored as TEXT
+ *  4. Working with native JSON columns and serialized arrays stored as TEXT
  *
  * Usage:
  *   CLUSTER_ENDPOINT=abc123.dsql.us-east-1.on.aws tsx src/index.ts
@@ -37,7 +37,7 @@ async function main() {
 
     for (const p of allProducts) {
       const tags = p.tags?.split(",") ?? [];
-      const meta = p.metadata ? JSON.parse(p.metadata) : {};
+      const meta = (p.metadata ?? {}) as Record<string, unknown>;
       console.log(
         `  ${p.name} — $${(p.price / 100).toFixed(2)} | tags: [${tags.join(", ")}] | brand: ${meta.brand ?? "n/a"}`
       );

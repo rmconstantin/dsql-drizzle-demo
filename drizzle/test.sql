@@ -13,6 +13,6 @@ CREATE TABLE "products" (
 	"category" varchar(100) NOT NULL,
 	"price" integer NOT NULL,
 	"tags" text,
-	"metadata" text,
+	"metadata" json,
 	"created_at" timestamp DEFAULT now()
 );

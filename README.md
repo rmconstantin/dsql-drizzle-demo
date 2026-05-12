@@ -5,7 +5,7 @@ A minimal demo showing how to use [Drizzle ORM](https://orm.drizzle.team/) with 
 ## What This Demonstrates
 
 - **Connecting** to DSQL using the official [DSQL node-postgres connector](https://docs.aws.amazon.com/aurora-dsql/latest/userguide/SECTION_program-with-dsql-connector-for-node-postgres.html) (automatic IAM auth)
-- **DSQL-compatible schema** design with Drizzle (UUIDs, no FKs, TEXT for JSON)
+- **DSQL-compatible schema** design with Drizzle (UUIDs, no FKs, JSON via native `json` type)
 - **Migration linting** with [`dsql-lint`](https://github.com/awslabs/aurora-dsql-tools/tree/main/dsql-lint) to catch incompatible SQL
 - **CRUD operations** using Drizzle's type-safe query builder
 - **Application-layer referential integrity** (DSQL doesn't enforce Foreign Keys constraints)
@@ -69,7 +69,8 @@ Drizzle works with DSQL via its `node-postgres` driver. Key things to keep in mi
 |---|---|---|
 | `serial()` / `bigserial()` | ❌ Not supported | Use `uuid().defaultRandom()` |
 | `.references()` (foreign keys) | ❌ Not supported | Validate in app code before insert |
-| `json()` / `jsonb()` | ❌ Not supported | Use `text()` + `JSON.stringify/parse` |
+| `json()` | ✅ Supported | Use `json()` directly — no workaround needed |
+| `jsonb()` | ❌ Not supported | Use `json()` instead; `dsql-lint --fix` auto-rewrites `jsonb()` → `json()` |
 | `pgEnum()` | ❌ Not supported | Use `varchar` + CHECK constraint |
 | Index creation | Must be ASYNC | `dsql-lint --fix` rewrites `CREATE INDEX` → `CREATE INDEX ASYNC` |
 | Transactions | 3,000 rows max | Batch large operations |
@@ -80,7 +81,7 @@ The recommended workflow for Drizzle + DSQL:
 
 1. Define schema in `src/db/schema.ts` using DSQL-compatible types
 2. `npm run db:generate` — generate SQL migration files
-3. `npm run db:lint:fix` — auto-fix DSQL incompatibilities (e.g., `CREATE INDEX` → `CREATE INDEX ASYNC`)
+3. `npm run db:lint:fix` — auto-fix DSQL incompatibilities (e.g., `CREATE INDEX` → `CREATE INDEX ASYNC`, `jsonb` → `json`)
 4. `npm run db:migrate` — apply to your DSQL cluster
 
 ## Resources
